@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "lib": [
+            "DOM",
+            "ES2015",
+            "DOM.Iterable"
+        ],
+        "moduleResolution": "node"
+    },
+    "lib": [
+        "DOM",
+        "ES2015",
+        "DOM.Iterable"
+    ],
+    "include": [
+        "src/**/*.ts"
+    ],
+}

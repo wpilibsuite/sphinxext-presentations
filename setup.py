@@ -23,10 +23,12 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/wpilibsuite/sphinx-presentations",
     packages=["sphinxext/presentations"],
-    package_data={"sphinxext/presentations": [
-        "static/css/*",
-        "static/js/*",
-    ]},
+    package_data={
+        "sphinxext/presentations": [
+            "static/css/*",
+            "static/js/*",
+        ]
+    },
     include_package_data=True,
     install_requires=["sphinx>=2.0"],
     classifiers=[

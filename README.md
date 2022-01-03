@@ -22,7 +22,7 @@ Presentations will launch when `?present` is appended to the url of a page. It i
 
 ### Installing dependencies
 ```
-npm init
+npm install
 ```
 ### Building js
 ```

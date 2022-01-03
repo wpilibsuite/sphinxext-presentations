@@ -11,7 +11,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
         (lambda app: app.config.html_static_path.append(static_dir.as_posix())),
     )
 
-    app.add_js_file(Path("./js/present.js").as_posix(), kwargs={"async": "async"})
+    app.add_js_file(Path("./js/present.js").as_posix(), **{"async": "async"})
 
     return {
         "parallel_read_safe": True,

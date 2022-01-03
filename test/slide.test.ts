@@ -121,7 +121,7 @@ describe("buildItem", () => {
     it("text", () => {
         let item: Item = {type: "text", text: "asdf"};
         let html = buildItem(item);
-        expect(html.element.outerHTML).to.equal("<p>asdf</p>");
+        expect(html.element.outerHTML).to.equal(`<p style="font-size: 0.7em; line-height: 1.2; text-align: left;">asdf</p>`);
     });
 
     it("figure", () => {
@@ -134,7 +134,7 @@ describe("buildItem", () => {
     it("slide", () => {
         let item: Slide = {type: "title", items: [], title: "title"};
         let html = buildItem(item);
-        expect(html.element.outerHTML).to.equal('<section><div style="margin: 32px;"><h1>title</h1></div></section>');
+        expect(html.element.outerHTML).to.equal(`<section style="text-align: left;"><div style="margin: 32px;"><h1>title</h1></div></section>`);
     });
 });
 
@@ -143,18 +143,18 @@ describe("buildSlide", () => {
     it("title", () => {
         let slide: Slide = {type: "title", items: [], title: "title"};
         let html = buildSlide(slide);
-        expect(html.element.outerHTML).to.equal('<section><div style="margin: 32px;"><h1>title</h1></div></section>');
+        expect(html.element.outerHTML).to.equal(`<section style="text-align: left;"><div style="margin: 32px;"><h1>title</h1></div></section>`);
     });
 
     it("title and content", () => {
         let slide: Slide = {type: "content", items: [{type: "text", text: "asdf2"}], title: "asdf1"};
         let html = buildSlide(slide);
-        expect(html.element.outerHTML).to.equal('<section><div style="margin: 32px;"><h1 style="margin-bottom: 48px; text-align: left;">asdf1</h1><ul><li style="margin-bottom: 24px;"><p>asdf2</p></li></ul></div></section>');
+        expect(html.element.outerHTML).to.equal(`<section style="text-align: left;"><div style="margin: 32px;"><h1 style="margin-bottom: 48px; text-align: left;">asdf1</h1><ul><li style="font-size: 2.5em; line-height: 1.2; margin-bottom: 24px;"><p style="font-size: 0.7em; line-height: 1.2; text-align: left;">asdf2</p></li></ul></div></section>`);
     });
 
     it("figure and content", () => {
         let slide: Slide = {type: "figure and content", figure: {type: "figure", h: H("q")}, items:[{type: "text", text: "asdf2"}], title: "asdf1"};
         let html = buildSlide(slide);
-        expect(html.element.outerHTML).to.equal('<section><div style="margin: 32px;"><h1 style="margin-bottom: 48px; text-align: left;">asdf1</h1><table><tr><td style="width: 50%; padding-right: 16px;"><q></q></td><td style="padding-left: 16px;"><ul><li style="margin-bottom: 24px;"><p>asdf2</p></li></ul></td></tr></table></div></section>');
+        expect(html.element.outerHTML).to.equal(`<section style="text-align: left;"><div style="margin: 32px;"><h1 style="margin-bottom: 48px; text-align: left;">asdf1</h1><table><tr><td style="width: 50%; padding-right: 16px;"><q></q></td><td style="padding-left: 16px;"><ul><li style="font-size: 2.5em; line-height: 1.2; margin-bottom: 24px;"><p style="font-size: 0.7em; line-height: 1.2; text-align: left;">asdf2</p></li></ul></td></tr></table></div></section>`);
     });
 });

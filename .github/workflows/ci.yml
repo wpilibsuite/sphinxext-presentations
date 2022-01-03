@@ -17,7 +17,7 @@ jobs:
 
   test-js:
     name: Test js
-    runs-ons "${{ matrix.os }}-latest"
+    runs-on: "${{ matrix.os }}-latest"
     strategy:
       matrix:
         os: [ubuntu, windows, macos]

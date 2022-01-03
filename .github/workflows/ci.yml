@@ -1,0 +1,102 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+    - name: Black
+      run: |
+        pip install black
+        black --check --exclude /docs --diff .
+
+  test-js:
+    name: Test js
+    runs-ons "${{ matrix.os }}-latest"
+    strategy:
+      matrix:
+        os: [ubuntu, windows, macos]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm test
+
+  # test-python:
+  #   name: "Test py - ${{ matrix.os }}, py ${{ matrix.python-version }}, Sphinx ${{ matrix.sphinx }}"
+  #   runs-on: "${{ matrix.os }}-latest"
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu, windows, macos]
+  #       python-version: ['3.7', '3.8', '3.9']
+  #       sphinx: ['2', '3', '4']
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Setup Python
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #     - name: Install dev dependencies
+  #       shell: bash
+  #       run: |
+  #         set -xe
+  #         python -VV
+  #         python -m site
+  #         python -m pip install --upgrade pip setuptools wheel
+  #         python -m pip install -r dev-requirements.txt
+  #         python -m pip install sphinx==${{ matrix.sphinx }}.*
+  #     - name: Build wheel
+  #       run: |
+  #         python setup.py bdist_wheel
+  #     - name: Install wheel
+  #       shell: bash
+  #       run: |
+  #         python -m pip install dist/*.whl
+  #     - name: Install test dependencies
+  #       run: |
+  #         python -m pip install -r test-requirements.txt
+      
+  #     - name: Find Chrome Location
+  #       if : ${{ matrix.os == 'windows' }}
+  #       run: |
+  #         if not exist "C:\Program Files (x86)\Google" mkdir "C:\Program Files (x86)\Google"
+  #         if not exist "C:\Program Files (x86)\Google\Chrome" mkdir "C:\Program Files (x86)\Google\Chrome"
+  #         mklink /D "C:\Program Files (x86)\Google\Chrome\Application" "C:\Program Files\Google\Chrome\Application"
+  #       shell: cmd
+  #     - name: Run Tests
+  #       run: |
+  #         cd tests
+  #         python -m pytest -vv --headless
+
+  pypi-release:
+    if: startsWith(github.ref, 'refs/tags/v') && github.repository_owner	== 'wpilibsuite'
+    needs: test-js
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.6'
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install -r dev-requirements.txt
+      - name: Build PyPI Wheel
+        run: |
+          python setup.py sdist
+          python setup.py bdist_wheel
+      - name: Publish a Python distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}

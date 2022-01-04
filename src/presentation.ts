@@ -1,17 +1,17 @@
 "use strict";
-export { present, buildPresentation};
+export { present, buildPresentation };
 
 import Reveal from 'reveal.js';
 import { match, __, not, select, when, isMatching } from 'ts-pattern';
 
-import {H, _H} from './element';
-import {splitParagraph} from './split';
-import { createScriptElement, createScriptSrcElement, htmlToElement, onLoad} from './utils';
-import {Slide, Item, buildSlide, Presentation, splitSlide} from './slide';
+import { H, _H } from './element';
+import { splitParagraph } from './split';
+import { createScriptElement, createScriptSrcElement, htmlToElement, onLoad } from './utils';
+import { Slide, Item, buildSlide, Presentation, splitSlide } from './slide';
 import { createSlides, getElements } from './sphinx';
 
 
-function buildPresentation(presentation: Presentation, slidesElement: _H){
+function buildPresentation(presentation: Presentation, slidesElement: _H) {
     /* Generate HTML for an entire presentation.
         This is non-idempotent. The slidesElement passed in is modified.
         If a new slidesElement is returned, then the presentation library
@@ -21,7 +21,7 @@ function buildPresentation(presentation: Presentation, slidesElement: _H){
         slidesElement.element.removeChild(slidesElement.element.firstChild);
     }
     for (const [index, slide] of presentation.slides.entries()) {
-        
+
         let builtSlide = buildSlide(slide);
         slidesElement.append(
             builtSlide
@@ -82,22 +82,22 @@ function present(): void {
             type: "content",
             title: "End of Presentation",
             items: [
-                {type: "html", h: promo},
+                { type: "html", h: promo },
             ],
         }
     );
 
     console.log(slidesArray);
-    let presentation = {slides: slidesArray};
+    let presentation = { slides: slidesArray };
 
     buildPresentation(presentation, slides);
 
     // Inject the built presentation into the page
     let sherman = document.getElementsByTagName("body")[0];
     sherman.parentNode.replaceChild(peabody.element, sherman);
-    
+
     initializePresentation(presentation, Reveal);
-    
+
 }
 (window as any).present = present;
 
@@ -124,7 +124,23 @@ function initializePresentation(presentation: Presentation, reveal: Reveal) {
         progress: true,
         slideNumber: true,
         history: false,
-        keyboard: true,
+        keyboard: {
+            27: () => {
+                try {
+                    let prevURL = new URL(document.referrer);
+                    let currURL = new URL(location.href);
+
+                    if (prevURL.origin == currURL.origin && prevURL.pathname == currURL.pathname) {
+                        window.history.back();
+                    } else {
+                        location.href = ".";
+                    }
+                    
+                } catch {
+                    location.href = ".";
+                }
+            },
+        },
         overview: true,
         center: false,
         disableLayout: true,
@@ -143,11 +159,11 @@ function initializePresentation(presentation: Presentation, reveal: Reveal) {
         mouseWheel: false,
         hideAddressBar: false,
         previewLinks: true,
-        transition: 'slide', 
+        transition: 'slide',
         transitionSpeed: 'default',
         backgroundTransition: 'fade',
         viewDistance: 3,
-        parallaxBackgroundImage: '', 
+        parallaxBackgroundImage: '',
         parallaxBackgroundSize: '',
         parallaxBackgroundHorizontal: null,
         parallaxBackgroundVertical: null,
@@ -178,11 +194,11 @@ function initializePresentation(presentation: Presentation, reveal: Reveal) {
 
             // Force a refresh of the presentation
             // reveal.sync();
-            reveal.slide( event.indexh, event.indexv, event.indexf );
+            reveal.slide(event.indexh, event.indexv, event.indexf);
             onSlideTransitioned(event);
         }
     }
 
-    reveal.on( 'slidetransitionend', event => {onSlideTransitioned(event)} );
+    reveal.on('slidetransitionend', event => { onSlideTransitioned(event) });
 }
 (window as any).initializePresentation = initializePresentation;

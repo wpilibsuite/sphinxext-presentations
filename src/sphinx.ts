@@ -30,7 +30,7 @@ function createSlides(elements: Element[]): Slide[] {
         if (element.classList.contains("image-reference")) {
             slides.push({ type: "figure and content", title: title, figure: {type: "figure", h: H(element)}, items:[] });
             continue;
-        } else if (! isMatching({type: "figure and content"}, slides.at(-1))) {
+        } else if (! isMatching({type: "figure and content"}, slides[slides.length - 1])) {
             slides.push({ type: "content",  title: title, items: [] });
         }
         
@@ -41,12 +41,12 @@ function createSlides(elements: Element[]): Slide[] {
 
             for(const p of paragraphs) {
                 // Create a text item with bullet points for each sentence
-                slides.at(-1).items.push({ type: "text", text: p });
+                slides[slides.length - 1].items.push({ type: "text", text: p });
             }
             continue;
         }
 
-        slides.at(-1).items.push({type: "html", h: H(element) });
+        slides[slides.length - 1].items.push({type: "html", h: H(element) });
 
     }
 

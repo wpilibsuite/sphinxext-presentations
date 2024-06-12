@@ -59,7 +59,7 @@ function getElements(): Element[] {
     let elements = [];
     let webSections = document.getElementsByClassName("section");
     if (webSections.length == 0) {
-        let rstContent = document.getElementsByClassName("rst-content").length ? document.getElementsByClassName("rst-content")[0] : document.getElementsByClassName("content")[0];
+        let rstContent = document.getElementsByClassName("content")[0] ?? document.getElementsByClassName("rst-content")[0];
         webSections = rstContent.getElementsByTagName("section");
     }
     for (const section of webSections) {

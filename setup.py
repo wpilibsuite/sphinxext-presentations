@@ -21,7 +21,7 @@ setuptools.setup(
     description="Sphinx Extension that turns documentation into presentations.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/wpilibsuite/sphinx-presentations",
+    url="https://github.com/wpilibsuite/sphinxext-presentations",
     packages=["sphinxext/presentations"],
     package_data={
         "sphinxext/presentations": [
